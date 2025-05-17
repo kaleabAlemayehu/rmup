@@ -53,9 +53,7 @@ def remove_background(file):
 
 def upload_image(image, filename ):
     # Upload an image
-    upload_result = cloudinary.uploader.upload(image,public_id=filename)
-    # print(upload_result["secure_url"])
-    # Optimize delivery by resizing and applying auto-format and auto-quality
+    cloudinary.uploader.upload(image,public_id=filename)
     optimize_url, _ = cloudinary_url(filename, fetch_format="auto", quality="auto")
     print("optimized", optimize_url)
     return optimize_url
