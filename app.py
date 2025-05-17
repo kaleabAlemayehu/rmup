@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 
 # loading env variables
 load_dotenv()
-print(os.environ.get("CLOUD_NAME", "NOPE"))
 
 cloudinary.config( 
     cloud_name = os.environ["CLOUD_NAME"], 
@@ -55,5 +54,4 @@ def upload_image(image, filename ):
     # Upload an image
     cloudinary.uploader.upload(image,public_id=filename)
     optimize_url, _ = cloudinary_url(filename, fetch_format="auto", quality="auto")
-    print("optimized", optimize_url)
     return optimize_url
