@@ -1,6 +1,6 @@
 from flask import Flask,request,jsonify
+from rembg import remove
 from dotenv import load_dotenv
-from werkzeug.utils import secure_filename
 import os
 import cloudinary
 import cloudinary.uploader
@@ -10,7 +10,6 @@ from cloudinary.utils import cloudinary_url
 load_dotenv()
 print(os.environ.get("CLOUD_NAME", "NOPE"))
 
-# Configuration       
 cloudinary.config( 
     cloud_name = os.environ["CLOUD_NAME"], 
     api_key = os.environ["API_KEY"], 
@@ -20,8 +19,6 @@ cloudinary.config(
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -39,20 +36,17 @@ def upload():
 
     if file:
         if to_remove:
-            image = remove_background(filename)
+            image = remove_background(file )
         else:
             image = file
-
         uploadedStr = upload_image(image, filename)
 
         return jsonify({'url': uploadedStr}), 200
 
-def remove_background(filepath):
-    # TODO: change to rembg but
-    # For now, i’ll just rename it to simulate processing
-    new_path = filepath.replace('.', '_nobg.')
-    os.rename(filepath, new_path)
-    return new_path
+def remove_background(file):
+    img = file.read()
+    output = remove(img)
+    return output
 
 
 def upload_image(image, filename ):
