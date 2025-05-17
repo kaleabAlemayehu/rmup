@@ -1,10 +1,12 @@
-from flask import Flask,request,jsonify
-from rembg import remove
-from dotenv import load_dotenv
 import os
+import random
+import string
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+from flask import Flask,request,jsonify
+from rembg import remove
+from dotenv import load_dotenv
 
 # loading env variables
 load_dotenv()
@@ -27,10 +29,10 @@ def upload():
     file = request.files['image']
     to_remove = request.form.get('toRemove', 'false').lower() == 'true'
     filename = request.form.get('filename',"").lower()
-
     if filename == "":
         return jsonify({'error': 'No filename stated'}), 400
-
+    # adding random value to deferentiat uploads
+    filename = filename.join(random.choices(string.ascii_letters+ string.digits, k=8))
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
